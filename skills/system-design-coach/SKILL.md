@@ -64,7 +64,7 @@ If the chosen reference file is missing, say so explicitly in chat and fall back
 
 Before drafting, run a research pass. The original coach contract requires this and it materially reduces hallucination.
 
-- WebSearch for the exact or near-exact interview question first (e.g. `"design Twitter timeline" system design interview`, `<question> HelloInterview`, `<question> walkthrough`). Prefer existing interview-style answers and engineering writeups.
+- WebSearch for the exact or near-exact interview question first (e.g. `"design Twitter timeline" system design interview`, `<question> walkthrough`, `<question> ML system design`). Prefer existing interview-style answers and engineering writeups from whichever sources surface; do not anchor on any one site.
 - For applied ML / AI infra, also WebSearch official engineering blogs, papers, and production writeups for the specific domain (e.g. Pinterest ranking, Uber Michelangelo, vLLM, FAISS, Spanner).
 - WebFetch the top 2–4 sources. Extract: standard scope, components, bottlenecks, metrics, common deep-dives, and tradeoffs. Cross-check terminology and numbers.
 

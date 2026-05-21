@@ -20,7 +20,7 @@ The skill:
    - `AI_System_Design_Coach.md` — applied ML, GenAI, RAG, ranking, agents
    - `AI_Infra_System_Design_Coach.md` — feature store, serving, training, GPU, LLM infra
    - `Low_Level_System_Design_Coach.md` — OOD / class design / machine coding
-3. **Researches** the question via WebSearch + WebFetch (HelloInterview, eng blogs, papers) to reduce hallucination.
+3. **Researches** the question via WebSearch + WebFetch (interview-prep walkthroughs, engineering blogs, papers — whichever surface in search) to reduce hallucination.
 4. **Renders** a single self-contained HTML page (`output/<slug>.html`) with a sticky TOC, 7–10 timed sections summing to ~40 minutes, Mermaid architecture diagrams that *evolve* across versions, bad/good/great cards, and an interviewer follow-up block.
 5. **Opens** the file in your default browser. The chat reply itself is only the reframed problem (if any), the route, what was researched, the file path, and a follow-up offer — the answer lives in the HTML.
 

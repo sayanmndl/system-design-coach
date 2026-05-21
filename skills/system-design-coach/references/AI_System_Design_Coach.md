@@ -54,8 +54,8 @@ Use the research pass to reduce hallucination:
 
 Prefer references in this order:
 
-1. Existing interview-prep answers for the same or very similar question, especially HelloInterview when available.
-2. Strong ML system design resources such as Educative, IGotAnOffer, Interview Query, or similar educational walkthroughs.
+1. Existing interview-prep walkthroughs for the same or very similar question, from any reputable source that surfaces in search.
+2. Strong ML system design educational resources (interview-prep platforms, course materials, structured walkthroughs) — use whichever appears, do not anchor on a specific brand.
 3. Official engineering blogs, research papers, docs, and production writeups for factual or domain-specific details.
 4. General practical writeups only when better sources are unavailable.
 

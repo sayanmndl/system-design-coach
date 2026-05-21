@@ -32,7 +32,7 @@ Use the research pass to reduce hallucination:
 
 Prefer references in this order:
 
-1. Existing interview-prep answers for the same or very similar question, especially HelloInterview and other strong system-design interview resources.
+1. Existing interview-prep walkthroughs for the same or very similar question, from any reputable source that surfaces in search — do not anchor on a specific brand or platform.
 2. Official docs, engineering blogs, papers, and production writeups for implementation details or domain-specific facts.
 3. General educational resources only when better sources are unavailable.
 
