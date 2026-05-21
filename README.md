@@ -14,14 +14,15 @@ Ask anything like:
 
 The skill:
 
-1. **Routes** the prompt to one of four specialized coach prompts:
+1. **Reframes** short or bare prompts ("Design Uber", "design RAG") into a complete interview-style question with explicit surface, scale, and central decision — so the rest of the pipeline anchors on a real question instead of guessing. Already-scoped prompts skip this step.
+2. **Routes** the prompt to one of four specialized coach prompts:
    - `System_Design_Coach.md` — general distributed / backend
    - `AI_System_Design_Coach.md` — applied ML, GenAI, RAG, ranking, agents
    - `AI_Infra_System_Design_Coach.md` — feature store, serving, training, GPU, LLM infra
    - `Low_Level_System_Design_Coach.md` — OOD / class design / machine coding
-2. **Researches** the question via WebSearch + WebFetch (HelloInterview, eng blogs, papers) to reduce hallucination.
-3. **Renders** a single self-contained HTML page (`output/<slug>.html`) with a sticky TOC, 7–10 timed sections summing to ~40 minutes, Mermaid architecture diagrams that *evolve* across versions, bad/good/great cards, and an interviewer follow-up block.
-4. **Opens** the file in your default browser. The chat reply itself is only ~4 lines (route, what was researched, file path, follow-up offer) — the answer lives in the HTML.
+3. **Researches** the question via WebSearch + WebFetch (HelloInterview, eng blogs, papers) to reduce hallucination.
+4. **Renders** a single self-contained HTML page (`output/<slug>.html`) with a sticky TOC, 7–10 timed sections summing to ~40 minutes, Mermaid architecture diagrams that *evolve* across versions, bad/good/great cards, and an interviewer follow-up block.
+5. **Opens** the file in your default browser. The chat reply itself is only the reframed problem (if any), the route, what was researched, the file path, and a follow-up offer — the answer lives in the HTML.
 
 ## Install
 
@@ -85,4 +86,4 @@ This skill collapses that into a single HTML page where:
 
 ## License
 
-MIT — see `LICENSE`.
+Apache License 2.0 — see [`LICENSE`](LICENSE).
