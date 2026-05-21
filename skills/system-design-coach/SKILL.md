@@ -84,7 +84,33 @@ Procedure:
 
 The HTML must be a single file. Mermaid loads from the public CDN; no build step.
 
-## Step 6 — Output contract for the HTML
+## Step 6 — Verify every Mermaid diagram before opening the page
+
+Mermaid parse errors silently break individual diagrams in the rendered page — the rest of the HTML still loads, so the failure is easy to miss in the chat reply but very visible in the user's browser ("Syntax error in graph" or a blank box). After writing the HTML and before opening it, audit every Mermaid block for the hazards below. Treat this as a hard step, not a courtesy check.
+
+Hazards to scan for, in order of how often they bite:
+
+1. **Double quotes inside an unquoted label.** A label like `node[Policy reranker, "Your Algorithm" overlay]` makes the parser read the first `"` as a string-literal start and the diagram collapses. Fix: drop the inner quotes, replace with single quotes, or wrap the whole label in double quotes (e.g. `node["Policy reranker, 'Your Algorithm' overlay"]`). Prefer dropping or single-quoting; escape-wrapping is fragile.
+2. **Reserved-word node IDs.** Mermaid treats certain identifiers specially: `open`, `end`, `class`, `style`, `direction`, `graph`, `subgraph`, `flowchart`, `state`, `note`, `link`, `default`, `interpolate`. Using them as node IDs (e.g. `open([Open Reels tab])`) breaks parsing depending on version. Rename to `entry`, `start`, `gate`, etc.
+3. **Unquoted parentheses, brackets, or `:` in labels.** A label like `svc[Core (sharded) service]` may break because `(` is a shape delimiter. Wrap such labels in double quotes: `svc["Core (sharded) service"]`.
+4. **Mismatched `subgraph` / `end` blocks.** Every `subgraph X` needs a matching `end`. Misaligned indentation hides this; count opens and closes.
+5. **Stray semicolons or trailing commas.** Mermaid accepts `;` as a statement separator but mixing it with line-separated edges causes confusing errors. Default to one edge per line, no semicolons.
+6. **HTML entities in labels.** `&` becomes `&amp;` when the HTML is written; inside a Mermaid label that often fails. Prefer `and`.
+7. **For `classDiagram` / `stateDiagram-v2`:** state names with spaces must be quoted; method signatures with parentheses are fine inside a class block but break outside it. For `sequenceDiagram`, every participant referenced in messages must appear in a `participant` declaration (or use `actor`) when the name contains spaces.
+
+Verification procedure after writing the HTML and before opening it:
+
+1. Run a grep audit over every Mermaid block in the file:
+   ```bash
+   awk '/<div class="mermaid">/,/<\/div>/' <file> | grep -nE '"[^"]+"|^\s*(open|end|class|style|direction|graph|subgraph|state|note|link|default|interpolate)\b'
+   ```
+   The first pattern catches unescaped quoted text inside labels; the second catches reserved-word node IDs at line starts. The expected result is no matches (other than the literal `<div class="mermaid">` tags themselves).
+2. Mentally trace each diagram: every arrow source and target must reference a valid node ID; every `subgraph` must have a matching `end`; every label is either unquoted-and-safe or double-quoted-as-a-whole.
+3. Only after the audit passes, run the `open` command to launch the browser.
+
+If a diagram fails the audit, fix the source and re-audit before opening. Do not ship the page to the user with "the diagram might have a syntax error" — verification is part of the rendering step.
+
+## Step 7 — Output contract for the HTML
 
 Header
 
