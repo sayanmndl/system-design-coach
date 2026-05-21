@@ -1,0 +1,430 @@
+<!--
+  System Design Coach — canonical HTML scaffold.
+
+  How to use:
+  - Copy this file's structure, swap {{PLACEHOLDERS}}, and write the result to
+    `output/<kebab-slug>.html` under the current working directory.
+  - Keep the <head>, all CSS, and the bottom <script> intact. Tweak only the body sections.
+  - All sections should be timed (e.g. "5 min") and add up to ~40 minutes total.
+  - For every Mermaid diagram, wrap in `<figure class="diagram"><div class="mermaid">…</div><figcaption>…</figcaption></figure>` and caption what changed since the previous version.
+  - For subtle decisions, use the `.bgg` Bad/Good/Great cards.
+  - Never emit a name-only bullet — each bullet must explain meaning, why it matters, and the tradeoff.
+
+  Placeholders to replace:
+    {{TITLE}}        — the interview question, e.g. "Design Twitter timeline"
+    {{ROUTE}}        — one of: "General system design", "Applied ML", "AI infra", "Low-level design"
+    {{ROUTE_REASON}} — one-sentence justification for the route
+    Everything inside <main>…</main> is example content. Rewrite per question.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}} — System Design Coaching</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1c2230;
+      --fg: #e6edf3;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --accent-2: #a371f7;
+      --good: #3fb950;
+      --bad: #f85149;
+      --great: #d2a8ff;
+      --border: #30363d;
+      --code-bg: #161b22;
+      --warn: #d29922;
+      --max-w: 880px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.65;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      nav.toc { position: relative; top: 0; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+    nav.toc {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 16px 28px 24px;
+      border-right: 1px solid var(--border);
+      font-size: 14px;
+    }
+    nav.toc h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+    nav.toc ol { list-style: none; padding: 0; margin: 0; }
+    nav.toc li { margin: 4px 0; }
+    nav.toc a {
+      color: var(--fg);
+      text-decoration: none;
+      display: block;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border-left: 2px solid transparent;
+    }
+    nav.toc a:hover { background: var(--panel); }
+    nav.toc a.active { background: var(--panel); border-left-color: var(--accent); }
+    nav.toc a .time { color: var(--muted); font-size: 12px; margin-left: 6px; }
+    main {
+      padding: 40px clamp(20px, 5vw, 64px);
+      max-width: var(--max-w);
+    }
+    header.page {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 28px;
+      margin-bottom: 8px;
+    }
+    .route-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(88,166,255,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(88,166,255,0.4);
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
+    }
+    h1 { font-size: 30px; margin: 0 0 8px; line-height: 1.2; letter-spacing: -0.01em; }
+    .route-reason { color: var(--muted); font-size: 15.5px; margin: 0; }
+    .assumptions {
+      margin-top: 22px;
+      padding: 14px 18px;
+      background: var(--panel);
+      border-left: 3px solid var(--warn);
+      border-radius: 6px;
+      font-size: 14.5px;
+    }
+    .assumptions h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--warn);
+      margin: 0 0 6px;
+    }
+    .assumptions ul { margin: 4px 0 0; padding-left: 20px; }
+    section.coach {
+      margin: 52px 0;
+      scroll-margin-top: 12px;
+    }
+    section.coach h2 {
+      font-size: 22px;
+      margin: 0 0 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    section.coach h2 .time {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-left: 8px;
+    }
+    section.coach h3 { font-size: 17px; margin: 28px 0 8px; }
+    section.coach h4 { font-size: 14px; margin: 18px 0 4px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+    section.coach p { margin: 10px 0; }
+    section.coach ul, section.coach ol { padding-left: 22px; }
+    section.coach li { margin: 8px 0; }
+    code {
+      background: var(--code-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      border: 1px solid var(--border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    pre code { background: transparent; padding: 0; border: none; }
+    /* Bad / Good / Great cards */
+    .bgg {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 18px 0;
+    }
+    .bgg-card {
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .bgg-card .label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .bgg-bad   .label { background: rgba(248,81,73,0.15);  color: var(--bad);   border: 1px solid rgba(248,81,73,0.45); }
+    .bgg-good  .label { background: rgba(63,185,80,0.15);  color: var(--good);  border: 1px solid rgba(63,185,80,0.45); }
+    .bgg-great .label { background: rgba(210,168,255,0.15); color: var(--great); border: 1px solid rgba(210,168,255,0.5); }
+    .bgg-card p { margin: 4px 0; }
+    /* Diagram cards */
+    figure.diagram {
+      margin: 24px 0;
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    figure.diagram .mermaid {
+      display: flex;
+      justify-content: center;
+      min-height: 80px;
+      background: transparent;
+    }
+    figure.diagram figcaption {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+    }
+    /* Tradeoff takeaway */
+    .takeaway {
+      margin: 22px 0 8px;
+      padding: 12px 14px;
+      background: rgba(88,166,255,0.07);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      font-size: 14.5px;
+    }
+    .takeaway::before {
+      content: "Tradeoff — ";
+      font-weight: 700;
+      color: var(--accent);
+    }
+    /* Recap follow-ups */
+    .followups {
+      margin-top: 20px;
+      padding: 18px 20px;
+      background: var(--panel-2);
+      border-radius: 10px;
+    }
+    .followups h3 { margin-top: 0; }
+    .refs ul { list-style: "→  "; padding-left: 16px; }
+    .refs li { color: var(--muted); margin: 6px 0; }
+    .refs li a { color: var(--accent); }
+    footer { text-align: center; color: var(--muted); font-size: 12px; margin: 60px 0 24px; }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- TOC: keep in sync with section IDs and times. Total ≈ 40 min. -->
+  <nav class="toc">
+    <h2>40-min walkthrough</h2>
+    <ol>
+      <li><a href="#s1">1. Requirements & scope <span class="time">5 min</span></a></li>
+      <li><a href="#s2">2. API & data model <span class="time">5 min</span></a></li>
+      <li><a href="#s3">3. High-level architecture <span class="time">6 min</span></a></li>
+      <li><a href="#s4">4. Deep dive A <span class="time">6 min</span></a></li>
+      <li><a href="#s5">5. Deep dive B <span class="time">6 min</span></a></li>
+      <li><a href="#s6">6. Reliability & failure modes <span class="time">4 min</span></a></li>
+      <li><a href="#s7">7. Observability & rollout <span class="time">4 min</span></a></li>
+      <li><a href="#s8">8. Recap & follow-ups <span class="time">4 min</span></a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="page">
+      <span class="route-badge">{{ROUTE}}</span>
+      <h1>{{TITLE}}</h1>
+      <p class="route-reason">{{ROUTE_REASON}}</p>
+      <div class="assumptions">
+        <h3>Assumptions</h3>
+        <ul>
+          <li>State an explicit, load-bearing assumption here.</li>
+          <li>Three to five total — each one a sentence, not a fragment.</li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Each section: open with 1–2 framing sentences, then prose + annotated bullets. -->
+    <section class="coach" id="s1">
+      <h2>1. Requirements & scope <span class="time">5 min</span></h2>
+      <p>One or two sentences stating what this section is trying to prove. Then move into functional and non-functional requirements as explanatory prose.</p>
+
+      <h3>Functional</h3>
+      <p>Describe the core user-visible behavior in prose. After listing, explain why each item is in scope, what tempting features are explicitly out of scope, and why.</p>
+
+      <h3>Non-functional</h3>
+      <p>State scale, latency, availability, and consistency goals with the reasoning behind each number. Avoid plucking SLAs out of thin air — anchor them to user expectation or product surface.</p>
+
+      <div class="bgg">
+        <div class="bgg-card bgg-bad"><span class="label">Bad</span><p>The naive framing and the concrete failure mode it creates.</p></div>
+        <div class="bgg-card bgg-good"><span class="label">Good</span><p>A defensible baseline and the limitation it still has.</p></div>
+        <div class="bgg-card bgg-great"><span class="label">Great</span><p>The interview-ready framing, why it maps to the product goal, how it is measured, and what tradeoff remains.</p></div>
+      </div>
+
+      <p class="takeaway">State the key tradeoff this section leaves on the table.</p>
+    </section>
+
+    <section class="coach" id="s2">
+      <h2>2. API &amp; data model <span class="time">5 min</span></h2>
+      <p>Frame the section. For each endpoint, state the contract and why it exists; for each entity, state what state it owns and why ownership belongs there.</p>
+      <pre><code>POST /v1/example
+{
+  "field": "value"
+}</code></pre>
+      <p>Walk through why the request shape matches the product flow, what alternative shapes were rejected, and what failure cases the response must communicate.</p>
+    </section>
+
+    <section class="coach" id="s3">
+      <h2>3. High-level architecture <span class="time">6 min</span></h2>
+      <p>Start with the smallest design that satisfies v1. Then add one scaling concern per evolution step. Explain in prose what changed and why before showing each diagram.</p>
+
+      <figure class="diagram">
+        <div class="mermaid">
+flowchart LR
+  client[Client] --> api[API Gateway]
+  api --> svc[Core Service]
+  svc --> cache[(Cache)]
+  svc --> db[(Primary DB)]
+        </div>
+        <figcaption>v1 — single service, single DB, single cache. Sized for the smallest defensible launch.</figcaption>
+      </figure>
+
+      <p>Explain why v1 is enough as a baseline, where it will first crack, and which axis of scale forces the next change.</p>
+
+      <figure class="diagram">
+        <div class="mermaid">
+flowchart LR
+  client[Client] --> api[API Gateway]
+  api --> svc[Core Service]
+  svc --> q[(Async Queue)]
+  q --> worker[Background Worker]
+  svc --> cache[(Sharded Cache)]
+  worker --> db[(Sharded DB)]
+        </div>
+        <figcaption>v2 — split the write path through a queue so spikes do not block reads; shard the hot tier.</figcaption>
+      </figure>
+
+      <p class="takeaway">State which class of bottleneck this architecture solves and which one it pushes into the deep dives.</p>
+    </section>
+
+    <section class="coach" id="s4">
+      <h2>4. Deep dive A <span class="time">6 min</span></h2>
+      <p>Pick the bottleneck or correctness concern that most defines a strong answer to this question. Walk through bad / good / great choices, justify the great choice, and validate it against the requirements stated in section 1.</p>
+      <div class="bgg">
+        <div class="bgg-card bgg-bad"><span class="label">Bad</span><p>Why the naive approach silently breaks.</p></div>
+        <div class="bgg-card bgg-good"><span class="label">Good</span><p>The workable baseline and where it still hurts.</p></div>
+        <div class="bgg-card bgg-great"><span class="label">Great</span><p>The interview-ready choice, why it fits, and the residual tradeoff.</p></div>
+      </div>
+    </section>
+
+    <section class="coach" id="s5">
+      <h2>5. Deep dive B <span class="time">6 min</span></h2>
+      <p>Pick the second high-signal area for this question family. For ML routes this is often modeling or evaluation; for infra, scheduling or cost; for general, consistency or hot-key handling; for LLD, concurrency or extensibility.</p>
+    </section>
+
+    <section class="coach" id="s6">
+      <h2>6. Reliability &amp; failure modes <span class="time">4 min</span></h2>
+      <p>Frame the section as "what goes wrong, what we detect, what we fall back to." For each failure mode explain the signal that catches it and the bounded action the system takes.</p>
+    </section>
+
+    <section class="coach" id="s7">
+      <h2>7. Observability &amp; rollout <span class="time">4 min</span></h2>
+      <p>Explain what each metric reveals and what action it triggers — not just a list of names. Cover rollout strategy, kill switches, and the smallest user-visible win that justifies promoting v1 to v2.</p>
+    </section>
+
+    <section class="coach" id="s8">
+      <h2>8. Recap &amp; follow-ups <span class="time">4 min</span></h2>
+      <p>One short paragraph that names the design's strongest claim and its honest residual risk.</p>
+
+      <div class="followups">
+        <h3>Likely interviewer follow-ups</h3>
+        <ol>
+          <li>How would you handle 10× the write volume on the hottest entity?</li>
+          <li>What changes if the consistency requirement tightens to read-your-writes globally?</li>
+          <li>How do you measure success in the first 30 days post-launch?</li>
+        </ol>
+      </div>
+
+      <div class="refs">
+        <h3>Useful external references</h3>
+        <ul>
+          <li><a href="#">Source 1 — title</a></li>
+          <li><a href="#">Source 2 — title</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>Generated by system-design-coach</footer>
+  </main>
+</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    securityLevel: 'loose',
+    flowchart: { curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true },
+    class: { useMaxWidth: true },
+    themeVariables: {
+      background: '#161b22',
+      primaryColor: '#1c2230',
+      primaryTextColor: '#e6edf3',
+      primaryBorderColor: '#30363d',
+      lineColor: '#8b949e',
+      secondaryColor: '#1f2937',
+      tertiaryColor: '#0d1117'
+    }
+  });
+
+  // Active-section highlight in TOC
+  const tocLinks = document.querySelectorAll('nav.toc a');
+  const sections = document.querySelectorAll('section.coach');
+  const byId = id => document.querySelector(`nav.toc a[href="#${id}"]`);
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        const link = byId(e.target.id);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -65% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
